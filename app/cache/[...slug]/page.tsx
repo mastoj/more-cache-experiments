@@ -16,7 +16,9 @@ const CachedComponent = async (
     "/"
   )}`;
   const url =
-    env.ENVIRONMENT === "production" ? env.VERCEL_URL : "http://localhost:3000";
+    env.ENVIRONMENT === "production"
+      ? `https://${env.VERCEL_URL}`
+      : "http://localhost:3000";
   const response = await fetch(`${url}/api/date/${componentSlug}`, {
     next: {
       revalidate: props.revalidateTime,
