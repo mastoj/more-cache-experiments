@@ -1,3 +1,5 @@
+import { env } from "process";
+
 export const generateStaticParams = () => [];
 export const revalidate = 30;
 
@@ -13,15 +15,14 @@ const CachedComponent = async (
   const componentSlug = `${props.revalidateTime}/${props.params.slug.join(
     "/"
   )}`;
-  const response = await fetch(
-    `http://localhost:3000/api/date/${componentSlug}`,
-    {
-      next: {
-        revalidate: props.revalidateTime,
-        tags: ["all", ...props.tags],
-      },
-    }
-  );
+  const url =
+    env.ENVIRONMENT === "production" ? env.VERCEL_URL : "http://localhost:3000";
+  const response = await fetch(`${url}/api/date/${componentSlug}`, {
+    next: {
+      revalidate: props.revalidateTime,
+      tags: ["all", ...props.tags],
+    },
+  });
   const data = await response.json();
   return (
     <div>
